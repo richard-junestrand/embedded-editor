@@ -1,0 +1,71 @@
+body {
+  overflow: hidden;
+}
+
+.nav-right {
+  width: 250px;
+}
+.toolbar {
+  font-size: 18px;
+  &.e-toolbar .e-toolbar-item .e-tbar-btn .e-icons.e-btn-icon {
+    font-size: 20px;
+    &.menu-bar {
+      margin: 0 3px;
+    }
+  }
+}
+.main-sub {
+  height: 100vh;
+}
+.list-icon {
+  min-width: 33px;
+}
+.document-item-date {
+  font-size: 12px;
+  color: gray;
+}
+.card {border-radius: 0;}
+
+.chat-history {
+  overflow: auto;
+  height: calc(100vh - 129px);
+  .history-item {
+    .card {
+      max-width: 80%;margin-bottom: 10px;
+      word-wrap: break-word;
+      .card-body {
+        padding:10px;
+      }
+    }
+    .question {
+      background-color: #0E336A;margin-left: auto;
+    }
+    .answer {
+      margin-right: auto;
+    }
+  }
+}
+.sidebar-content {
+  overflow: auto;
+  height: calc(100vh - 44px);
+}
+
+.editors {
+  width: calc(100% - 250px);
+  .tab-editors {
+    &.e-tab.e-fill-mode .e-content .e-item>div>div {
+      height: 100%;
+      .editor {
+        height: 100%;
+      }
+    }
+  }
+  
+}
+.tab-add {
+  .e-tab-text {font-size: 20px!important;}
+  
+  .e-close-icon {
+    visibility: hidden;
+  }
+}
