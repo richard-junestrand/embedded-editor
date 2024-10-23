@@ -1,11 +1,11 @@
-import { useRef, useMemo } from 'react';
+import { useRef, useMemo, useState } from 'react';
 import {
-  SidebarComponent, ToolbarComponent, ItemsDirective, ItemDirective, ClickEventArgs,
-  TabComponent, TabItemDirective, TabItemsDirective
+  SidebarComponent, ToolbarComponent, ItemsDirective, ItemDirective, ClickEventArgs
 } from '@syncfusion/ej2-react-navigations';
 import { ListViewComponent } from '@syncfusion/ej2-react-lists';
 import { TextBoxComponent } from '@syncfusion/ej2-react-inputs';
 import moment from 'moment'
+import Tabs, { TabPane } from './Tabs';
 
 const Sidebar = () => {
   let sidebarobj = useRef<SidebarComponent>(null);
@@ -44,11 +44,9 @@ const Sidebar = () => {
       </div>
     );
   }
-  const tabContent = () => {
-    return <div className='mt-2'>
-      <ListViewComponent dataSource={Sidebar} template={documentTemplate} cssClass='e-list-template'></ListViewComponent>
-    </div>
-  }
+  //
+  const tabs = useMemo(() => [{ value: 0, label: 'Uploaded' }, { value: 1, label: 'Organisation' }], [])
+  const [tab, setTab] = useState(0)
   return <SidebarComponent ref={sidebarobj} width="300px" dockSize="50px" enableDock={true} target=".main" position="Left">
     <ToolbarComponent className='toolbar' cssClass="defaultToolbar" id="defaultToolbar" clicked={toggleSidebar}>
       <ItemsDirective>
@@ -64,12 +62,16 @@ const Sidebar = () => {
         <ListViewComponent dataSource={currentMenuItems} template={menuTemplate}></ListViewComponent>
         <div className="card-body">
           <TextBoxComponent placeholder="Search..."></TextBoxComponent>
-          <TabComponent>
-            <TabItemsDirective>
-              <TabItemDirective header={{ text: 'Uploaded' }} content={tabContent} />
-              <TabItemDirective header={{ text: 'Organisation' }} content={tabContent} />
-            </TabItemsDirective>
-          </TabComponent>
+          <Tabs items={tabs}
+            value={tab} onChange={setTab}>
+            {tabs.map((t, i) => {
+              return <TabPane key={i} active={tab === t.value}>
+                <div className='mt-2'>
+                  <ListViewComponent dataSource={Sidebar} template={documentTemplate} cssClass='e-list-template'></ListViewComponent>
+                </div>
+              </TabPane>
+            })}
+          </Tabs>
         </div>
       </div>
     </div>

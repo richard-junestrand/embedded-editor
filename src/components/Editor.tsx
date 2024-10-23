@@ -1,21 +1,16 @@
 import { useRef, useEffect } from 'react';
 import {
   DocumentEditorContainerComponent,
-  Toolbar,
-  ContextMenu,
+  Toolbar
 } from '@syncfusion/ej2-react-documenteditor';
-import { DocumentEditor } from '@syncfusion/ej2-documenteditor';
+import { useSharedState } from '../state';
+import { MenuItemModel } from '@syncfusion/ej2-react-navigations';
 
 // Inject the Toolbar and ContextMenu dependencies
-DocumentEditorContainerComponent.Inject(Toolbar, ContextMenu);
+DocumentEditorContainerComponent.Inject(Toolbar);
 
-// Extend the DocumentEditor interface
-interface ExtendedDocumentEditor extends DocumentEditor {
-  contextMenuSettings: any;
-  contextMenuItemSelect: (args: any) => void;
-}
-
-const Editor = () => {
+const Editor = ({ active }: { active: boolean }) => {
+  const [state, setState] = useSharedState();
   const refEditor = useRef<DocumentEditorContainerComponent>(null);
 
   // Rövarspråk encoding function
@@ -23,8 +18,7 @@ const Editor = () => {
     return text.replace(/([bcdfghjklmnpqrstvwxz])/gi, '$1o$1');
   };
 
-  // Function to Editorly Rövarspråk to selected text
-  const EditorlyRovarsprak = () => {
+  const applyRovarsprak = () => {
     if (refEditor.current) {
       const documentEditor = refEditor.current.documentEditor;
       const selection = documentEditor.selection;
@@ -50,50 +44,60 @@ const Editor = () => {
 
         // ReEditorly the stored paragraph format
         Object.assign(selection.paragraphFormat, paragraphFormat);
-      } else {
-        alert('Please select some text to Editorly Rövarspråk.');
+        setState(prev => ({ ...prev, apply: 0 }))
       }
+
     }
   };
+  useEffect(() => {
+    state.apply > 0 && active && applyRovarsprak()
+    // eslint-disable-next-line
+  }, [state.apply])
 
   // Handle context menu item selection
   const onContextMenuItemSelect = (args: any) => {
-    if (args.item.id === 'rovarsprak') {
-      EditorlyRovarsprak();
+    let id: string = refEditor.current!.documentEditor.element.id;
+    switch (args.id) {
+      case id + 'rovarsprak':
+        applyRovarsprak();
+        break;
     }
   };
+  const onContextMenuBeforeOpen = (args: any) => {
+    if (refEditor.current) {
+      let search: any = document.getElementById(args.ids[0]);
+      search.style.display = 'none';
+      let searchContent: string = refEditor.current.documentEditor.selection.text;
+      if (!refEditor.current.documentEditor.selection.isEmpty && /\S/.test(searchContent)) {
+        search.style.display = 'block';
+      }
+    }
 
+  };
+  //
   useEffect(() => {
     if (refEditor.current) {
-      const documentEditor = refEditor.current.documentEditor as ExtendedDocumentEditor;
-
-      // Set context menu settings
-      documentEditor.contextMenuSettings = {
-        show: true,
-        items: [], // Keep default items
-        customItems: [
-          {
-            text: 'Rövarspråk',
-            id: 'rovarsprak',
-            iconCss: 'e-icons e-edit',
-          },
-        ],
-      };
-
-      // Attach the context menu item select event handler
-      documentEditor.contextMenuItemSelect = onContextMenuItemSelect;
+      let menuItems: MenuItemModel[] = [
+        {
+          text: 'Rövarspråk',
+          id: 'rovarsprak',
+          iconCss: 'e-icons e-edit',
+        }];
+      refEditor.current.documentEditor.contextMenu.addCustomMenu(menuItems, false);
+      //
+      const removedToolbarItems = ["LocalClipboard", "RestrictEditing", "FormFields", "UpdateFields", "ContentControl", "XML Mapping"]
+      refEditor.current.toolbarItems = refEditor.current.toolbarItems.flatMap((r: any) => removedToolbarItems.includes(r) ? [] : [r])
     }
     // eslint-disable-next-line
   }, []);
-  //
-  return <div className='editor'>
-    <DocumentEditorContainerComponent
-      height='100%'
-      enableToolbar={true}
-      ref={refEditor}
-      serviceUrl="https://ej2services.syncfusion.com/production/web-services/api/documenteditor/"
-    />
-  </div>
+  return <DocumentEditorContainerComponent
+    height='100%'
+    enableToolbar={true}
+    customContextMenuBeforeOpen={onContextMenuBeforeOpen}
+    customContextMenuSelect={onContextMenuItemSelect}
+    ref={refEditor}
+    serviceUrl="https://ej2services.syncfusion.com/production/web-services/api/documenteditor/"
+  />
 };
 
 export default Editor;

@@ -13,7 +13,7 @@ const Chat = () => {
   const refChat = useRef<HTMLDivElement | null>(null);
   const onSubmitQuestion = (e: any) => {
     e.preventDefault();
-    setChatHistory(prev => [...prev, { question, answer: 'Answer to the question' }])
+    setChatHistory(prev => [...prev, { question, answer: `Answer to the question ${question}` }])
     setQuestion("")
   }
   useEffect(() => {
