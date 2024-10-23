@@ -37,7 +37,7 @@ const Editors = () => {
       {tabs.map(t => {
         return <li key={t.id} className="nav-item">
           <button className={`nav-link ${t.selected ? 'active' : ''}`}>
-            <span className='d-flex justify-between'>
+            <span className='d-flex justify-between align-items-center'>
               <span onClick={() => selectTab(t.id)}>{t.label}</span>
               <span className='icon-close link' onClick={() => removeTab(t.id)}><i className='bi bi-x'></i></span>
             </span>

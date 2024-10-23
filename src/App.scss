@@ -1,7 +1,11 @@
 body {
   overflow: hidden;
 }
-.e-control, .e-css, .e-error, .e-listview, body {
+.e-control,
+.e-css,
+.e-error,
+.e-listview,
+body {
   font-family: "Roboto", "Segoe UI", "GeezaPro", "DejaVu Serif", "sans-serif", "-apple-system", "BlinkMacSystemFont";
   font-size: 13px;
 }
@@ -60,9 +64,26 @@ body {
 
 .editors {
   width: calc(100% - 250px);
+  .nav-tabs {
+    .icon-close {
+      margin-left: 15px;
+      display: inline-block;
+      color: gray;
+      &:hover {
+        color: var(--bs-nav-link-color);
+      }
+    }
+    .tab-add {
+      border-color: transparent !important;
+    }
+    .bi {font-size: 18px;line-height: 24px;}
+  }
+  
+
   .tab-content {
     height: calc(100vh - 42px);
     position: relative;
+
     .editor {
       position: absolute;
       left: 0;
@@ -73,16 +94,32 @@ body {
       &.active {
         visibility: visible;
       }
+
+      .e-de-tool-ctnr-properties-pane {
+        display: flex;
+        flex-direction: column;
+        .e-de-pane {
+          order: -1;
+          .e-de-prop-pane {
+            width: 100%;
+            min-height: 0;
+            height: auto !important;
+            .e-de-cntr-pane-padding {
+              display: flex;
+              align-items: center;
+              .e-de-ctnr-segment {
+                margin-bottom: 0;
+              }
+              .e-de-ctnr-prop-label {
+                padding-right: 15px;
+              }
+            }
+          }
+        }
+      }
     }
   }
 }
-.link {cursor: pointer;}
-.icon-close {
-  margin-left: 15px;display: inline-block;color: gray;
-  &:hover {
-    color: var(--bs-nav-link-color);
-  }
-}
-.tab-add {
-  border-color: transparent !important;
+.link {
+  cursor: pointer;
 }
