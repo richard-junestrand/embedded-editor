@@ -103,7 +103,7 @@ body {
       &.active {
         visibility: visible;
       }
-
+      .show-heading {position: relative;z-index: 1;margin: 5px;}
       .e-de-tool-ctnr-properties-pane {
         display: flex;
         flex-direction: column;
