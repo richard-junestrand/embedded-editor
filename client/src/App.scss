@@ -116,7 +116,13 @@ body {
             .e-de-cntr-pane-padding {
               display: flex;
               align-items: center;
+              &#_header_footer {
+                justify-content: space-between;
+              }
               .e-de-ctnr-segment {
+                margin-bottom: 0;
+              }
+              .e-de-ctnr-prop-label {
                 margin-bottom: 0;
               }
               .e-de-ctnr-prop-label {
